@@ -409,6 +409,7 @@
   `(with-db-for-dataset [~'_ (resolve-dbdef '~(ns-name *ns*) '~dataset)]
      ~@body))
 
+;; TODO - this doesn't work 100% because the FK ID mappings get copied, but not updated!!!
 (defn- copy-db-tables-and-fields! [old-db-id new-db-id]
   (doseq [{old-table-id :id, :as table} (db/select Table :db_id old-db-id {:order-by [[:id :asc]]})]
     (let [{new-table-id :id} (db/insert! Table (-> table (dissoc :id) (assoc :db_id new-db-id)))]
